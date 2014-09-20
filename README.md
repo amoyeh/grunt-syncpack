@@ -24,16 +24,16 @@ This plugin requires Grunt.
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
 ```shell
-npm install syncpack --save-dev
+npm install grunt-syncpack --save-dev
 ```
 
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
-grunt.loadNpmTasks('syncpack');
+grunt.loadNpmTasks('grunt-syncpack');
 ```
 
-## The "syncpack" task
+## The "grunt-syncpack" task
 
 ### Overview
 In your project's Gruntfile, add a section named `syncpack` to the data object passed into `grunt.initConfig()`.
@@ -89,7 +89,7 @@ actions to perform, either "newerToTempFolder" or "mergeToRelease"
 - use **mergeToRelease** action to copy these newer compressed files to destination folder, the newer file mtime updated to the same as source file mtime, the \_\_temp\_\_ folder will be deleted afterward.
 
 ## Release History
-2014.9.20 initial release
+2014.9.21 initial release
 
 ## License
 Copyright (c) 2014 Amo Yeh. Licensed under the MIT license.
