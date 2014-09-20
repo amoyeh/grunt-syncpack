@@ -1,0 +1,29 @@
+{
+  "name": "grunt-syncpack",
+  "version": "1.0.0",
+  "description": "Synchronize and put only newer files into a temporary folder, use any compression plugin on these files then merge to relase folder. compatible with any gurnt plugin since no specific tweak needed.",
+  "repository": "https://github.com/amoyeh/synpack.git",
+  "author": {
+    "name": "Amo Yeh",
+    "email": "amocool611@gmail.com",
+    "url": "https://github.com/amoyeh/synpack"
+  },
+  "keywords": [
+    "gruntplugin", "synchronize", "synchronization", "folder", "compare" 
+  ],
+  "main": "Gruntfile.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-jshint": "~0.8.0",
+    "grunt-contrib-nodeunit": "~0.3.0",
+    "grunt": "~0.4.2",
+    "jshint-stylish": "~0.1.5"
+  },
+  "files": [
+    "tasks"
+  ]
+}
