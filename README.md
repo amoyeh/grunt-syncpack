@@ -13,7 +13,7 @@ Syncpack compares new files by using files mtime(modified time). To insure that 
  
 - **mergeToRelease** copy files in temp folder to destination folder, temporary folder will be deleted afterward.
  
-- no grunt plugin compatibility issue, any plugin will works.
+- no grunt plugin compatibility issue when compress newer files, any plugin will works.
  
 - speed up packaging process, only files in the temporary folder needs to be compressed.
  
