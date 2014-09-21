@@ -79,7 +79,7 @@ actions to perform, either "newerToTempFolder" or "mergeToRelease", see features
 #### options.tempFolderName
 Type: String
 
-Default : "__temp__"
+Default : "\_\_temp\_\_"
 
 the temporary folder name
 
@@ -125,8 +125,61 @@ grunt provided file format, make sure set to true to check every files in every 
 
 ### Typical Usage 
 
+```js
+module.exports = function (grunt) {
+
+    grunt.initConfig({
+
+		syncpack: {
+            getnew: {
+                options: {
+                    action: "newerToTempFolder",
+                    tempFolderName: "__temp__",
+                    logDetail: false,
+                },
+                cwd: "source",
+                dest: "release",
+                src: ["**/*.js", "**/*.css", "**/*.html", "**/*.jpg", "**/*.png"],
+                expand: true
+            },
+            release: {
+                options: {
+                    action: "mergeToRelease",
+                    tempFolderName: "__temp__",
+                    logDetail: false,
+                },
+                cwd: "source",
+                dest: "release",
+                src: ["**/*.js", "**/*.css", "**/*.html", "**/*.jpg", "**/*.png"],
+                expand: true
+            }
+        },
+		
+		//compress all js , notice that cwd and dest are set to temporary folder created by syncpack
+        uglify: {
+            task: {
+                files: [{
+                    expand: true,
+                    cwd: '__temp__',
+                    src: '**/*.js',
+                    dest: '__temp__'
+                }]
+            }
+        }
+		
+    });
+
+	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-syncpack');
+	
+	//create a task that first move newer files to temporary folder, use uglify compress these files in temporary folder, then move to release folder
+	grunt.task.registerTask("default", ["syncpack:getnew", "uglify", "syncpack:release"]);
+	
+};
+```
+
 - use **newerToTempFolder** action to copy newer files to a temporary folder.
-- use any of the compression plugin provided by grunt, ex:uglify, pngmin to the files in the temporary folder, since compression updates the files in the temporary folder, the mdate of these copied files are changed.
+- use any of the compression plugin provided by grunt, (for example uglify) to the files in the temporary folder, since compression updates the files in the temporary folder, the mdate of these copied files are changed.
 - use **mergeToRelease** action to copy these newer compressed files to destination folder, the newer file mtime updated to the same as source file mtime, the temporary folder will be deleted afterward.
 
 ## Release History
