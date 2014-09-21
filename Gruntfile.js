@@ -20,18 +20,26 @@ module.exports = function (grunt) {
 
         syncpack: {
             getnew: {
-				// files to copy 
-                options: { ext: ["**/*.js","**/*.html","**/*.css", "**/*.png", "**/*.jpg"] },	
-				// setting source folder and destination folder for comparison
-                files: { src: "/source", dest: "/release" }, 		
-				// compare and put newer files into a foler named "__temp__"
-				action: "newerToTempFolder" 								
+                options: {
+                    action: "newerToTempFolder",
+                    tempFolderName: "__temp__",
+                    logDetail: true,
+                },
+                cwd: "source",
+                dest: "release",
+                src: ["**/*.js", "**/*.css", "**/*.html", "**/*.jpg", "**/*.png"],
+                expand: true
             },
-            release:{
-				// setting source folder and destination folder for comparison
-                files: { src: "/source", dest: "/release" },
-				// copy files from __temp__ folder (after compressions) to destination folder, update mtime to match source.
-				action: "mergeToRelease" 									
+            release: {
+                options: {
+                    action: "mergeToRelease",
+                    tempFolderName: "__temp__",
+                    logDetail: true,
+                },
+                cwd: "source",
+                dest: "release",
+                src: ["**/*.js", "**/*.css", "**/*.html", "**/*.jpg", "**/*.png"],
+                expand: true
             }
         }
 
@@ -39,7 +47,6 @@ module.exports = function (grunt) {
 
     //load this plugin's task(s).
     grunt.loadTasks('tasks');
-
     grunt.registerTask('default', ['syncpack:getnew']);
 
 };

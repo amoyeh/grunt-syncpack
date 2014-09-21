@@ -3,19 +3,19 @@
 ### feature
 
 Syncpack can be used to synchronize files from source to destination folder. Instead of copy files directly to destination folder, 
-syncpack uses a action **newerToTempFolder** to copy these files into a temporary folder named \_\_temp\_\_.
+syncpack uses a action **newerToTempFolder** to copy these files into a temporary folder.
 you can use any custom compression plugins such as uglify or pngmin to compress these files in the temporary folder, then run other command **mergeToRelease**
 to put these newer compressed files to destination folder to finish the process. 
 
 Syncpack compares new files by using files mtime(modified time). To insure that files copied from temp folder to destination folder has same mtime, the **mergeToRelease** action updates every newer file mtime to the same source file mtime.
 
-- **newerToTempFolder** put newer files in temp folder from source and destination folder comparison.
+- **newerToTempFolder** put newer files in temporary folder from source and destination folder comparison.
  
 - **mergeToRelease** copy files in temp folder to destination folder, temporary folder will be deleted afterward.
  
 - no grunt plugin compatibility issue, any plugin will works.
  
-- speed up packaging process, since only files in the temporary folder needs to be compressed.
+- speed up packaging process, only files in the temporary folder needs to be compressed.
  
 ## Getting Started
 
@@ -42,18 +42,26 @@ In your project's Gruntfile, add a section named `syncpack` to the data object p
 grunt.initConfig({
     syncpack: {
         getnew: {
-			// file patterns to copy 
-            options: { ext: ["**/*.js","**/*.html","**/*.css", "**/*.png", "**/*.jpg"] },	
-			// setting source folder and destination folder for comparison
-            files: { src: "/source", dest: "/release" }, 		
-			// compare and put newer files into a foler named "__temp__"
-			action: "newerToTempFolder" 								
+            options: {
+                action: "newerToTempFolder",
+                tempFolderName: "__temp__",
+                logDetail: true,
+            },
+            cwd: "source",
+            dest: "release",
+            src: ["**/*.js", "**/*.css", "**/*.html", "**/*.jpg", "**/*.png"],
+            expand: true
         },
-        release:{
-			// setting source folder and destination folder for comparison
-            files: { src: "/source", dest: "/release" },
-			// copy files from __temp__ folder (after compressions) to destination folder, update mtime to match source.
-			action: "mergeToRelease" 									
+        release: {
+            options: {
+                action: "mergeToRelease",
+                tempFolderName: "__temp__",
+                logDetail: true,
+            },
+            cwd: "source",
+            dest: "release",
+            src: ["**/*.js", "**/*.css", "**/*.html", "**/*.jpg", "**/*.png"],
+            expand: true
         }
     },
 })
@@ -61,32 +69,65 @@ grunt.initConfig({
 
 ### Options
 
-#### options.ext
-Type: Array
-
-Default : undefined
-
-list of files to include in globbing patterns.[more detail](http://gruntjs.com/configuring-tasks#globbing-patterns)
-
-#### files
-Type: Object
-
-Default : undefined
-
-setting source and destination path, example {src: "/source/path", dest: "destination/path"}
-
-#### action
+#### options.action
 Type: String
 
 Default : undefined
 
-actions to perform, either "newerToTempFolder" or "mergeToRelease"
+actions to perform, either "newerToTempFolder" or "mergeToRelease", see features section for more information
+
+#### options.tempFolderName
+Type: String
+
+Default : "__temp__"
+
+the temporary folder name
+
+
+#### options.logDetail
+Type: boolean
+
+Default : false
+
+detail console message of every files copied, always show in grunt --verbose mode
+
+
+#### cwd
+Type: String
+
+Default : undefined
+
+current working directory, the project source directory
+
+
+#### dest
+Type: String
+
+Default : undefined
+
+the destination directory, usually the release directory that contains compressed files and ready for upload
+
+
+#### src
+Type: Array
+
+Default : undefined
+
+grunt provided file format, see [globbing pattern](http://gruntjs.com/configuring-tasks#globbing-patterns) for more detail.
+
+#### expand
+Type: boolean
+
+Default : true
+
+grunt provided file format, make sure set to true to check every files in every folder.
 
 
 ### Typical Usage 
-- use **newerToTempFolder** action to copy newer files to a temp folder name "__temp__"
-- use any of the compression plugin provided by grunt, ex:uglify, pngmin to the files in the "__temp__" folder, since compression updates the files in the \_\_temp\_\_ folder, the mdate of these files are changed.
-- use **mergeToRelease** action to copy these newer compressed files to destination folder, the newer file mtime updated to the same as source file mtime, the \_\_temp\_\_ folder will be deleted afterward.
+
+- use **newerToTempFolder** action to copy newer files to a temporary folder.
+- use any of the compression plugin provided by grunt, ex:uglify, pngmin to the files in the temporary folder, since compression updates the files in the temporary folder, the mdate of these copied files are changed.
+- use **mergeToRelease** action to copy these newer compressed files to destination folder, the newer file mtime updated to the same as source file mtime, the temporary folder will be deleted afterward.
 
 ## Release History
 2014.9.21 initial release
